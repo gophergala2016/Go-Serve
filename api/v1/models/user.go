@@ -9,10 +9,17 @@ type User struct {
 	Devise_token          string `valid:"alphanum,required"`
 }
 
+type UserDetails struct {
+	Id                    int    `valid:"numeric"`
+	Name                  string `valid:"alphanum,required"`
+	Mobile_number         string `valid:"alphanum,required"`
+	Devise_token          string `valid:"alphanum,required"`
+}
+
 type SuccessfulSignIn struct {
 	Success string
 	Message string
-	User    User
+	User    UserDetails
 	Session SessionDetails
 }
 

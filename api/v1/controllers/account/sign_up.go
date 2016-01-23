@@ -195,13 +195,13 @@ func (r registrationController) Create(rw http.ResponseWriter, req *http.Request
 			fmt.Printf("StartTime: %v\n", time.Now())
 			fmt.Println("User created Successfully!")
 
-			user := models.User{id, u.Firstname, u.Lastname, u.Email, u.Password, u.Password_confirmation, u.City, u.State, u.Country, u.Devise_token}
+			user := models.UserDetails{id, u.Name, u.Mobile_number, u.Devise_token}
 
 			b, err := json.Marshal(models.SuccessfulSignIn{
 				Success: "true",
 				Message: "User created Successfully!",
 				User:    user,
-				Session: models.Session{id, start_time},
+				Session: models.SessionDetails{id, u.Devise_token},
 			})
 
 			if err != nil {
