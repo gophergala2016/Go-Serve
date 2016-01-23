@@ -11,7 +11,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"time"
 )
 
@@ -83,7 +82,7 @@ func (r registrationController) Create(rw http.ResponseWriter, req *http.Request
 	}
 	if flag == 1 {
 		for mobile_res.Next() {
-			var email string
+			var mobile_number string
 			err = mobile_res.Scan(&mobile_number)
 			if err != nil {
 				log.Fatal(err)
@@ -168,7 +167,7 @@ func (r registrationController) Create(rw http.ResponseWriter, req *http.Request
 			encrypt_password := controllers.Encrypt(key, password)
 			encrypt_password_confirmation := controllers.Encrypt(key, confirm_password)
 
-			user_res, err := stmt.Exec(id, u.Nmae, u.Mobile_number, encrypt_password, encrypt_password_confirmation, u.Devise_token)
+			user_res, err := stmt.Exec(id, u.Name, u.Mobile_number, encrypt_password, encrypt_password_confirmation, u.Devise_token)
 			if err != nil || user_res == nil {
 				log.Fatal(err)
 			}
@@ -196,16 +195,16 @@ func (r registrationController) Create(rw http.ResponseWriter, req *http.Request
 			fmt.Printf("StartTime: %v\n", time.Now())
 			fmt.Println("User created Successfully!")
 
-			user := models.Register{id, u.Firstname, u.Lastname, u.Email, u.Password, u.Password_confirmation, u.City, u.State, u.Country, u.Devise_token}
+			user := models.User{id, u.Firstname, u.Lastname, u.Email, u.Password, u.Password_confirmation, u.City, u.State, u.Country, u.Devise_token}
 
-			b, err := json.Marshal(models.SignIn{
+			b, err := json.Marshal(models.SuccessfulSignIn{
 				Success: "true",
 				Message: "User created Successfully!",
 				User:    user,
 				Session: models.Session{id, start_time},
 			})
 
-			if err != nil || res == nil {
+			if err != nil {
 				log.Fatal(err)
 			}
 
