@@ -109,23 +109,24 @@ func session(user models.User, login, logout bool) (string, bool, models.UserDet
 	if err != nil {
 		log.Fatal(err)
 	}
+	user_details := models.UserDetails{user.Id,"",user.Mobile_number,user.Devise_token}
 	flag := 0
 	for get_user_id.Next() {
 		var id int
 		get_user_id.Scan(&id)
 		user_existance := controllers.Check_for_user(id)
 		if user_existance == false {
-			return "User Does not exist", true, user
+			return "User Does not exist", true, user_details
 		}
 	}
 	defer get_user_id.Close()
 	if login == true {
 		if user.Mobile_number == "" || user.Password == "" {
-			return "Please enter credentials to log in", true, user
+			return "Please enter credentials to log in", true, user_details
 		}
 	}
 	if user.Devise_token == "" {
-		return "Devise Token can't be empty", true, user
+		return "Devise Token can't be empty", true, user_details
 	} else {
 		for get_session.Next() {
 			flag = 1
@@ -141,16 +142,16 @@ func session(user models.User, login, logout bool) (string, bool, models.UserDet
 				log.Fatal(err)
 			}
 			if logout == true {
-				user := models.UserDetails{0, user.Mobile_number, "", user.Devise_token }
-				return "Logged out Successfully", false, user
+				user_details := models.UserDetails{0, user.Mobile_number, "", user.Devise_token }
+				return "Logged out Successfully", false, user_details
 			}
 		}
 		defer get_session.Close()
 		if logout == true && flag == 0 {
-			return "Session does not exist", true, user
+			return "Session does not exist", true, user_details
 		}
 		if login == true {
-			get_user, err := db.Query("SELECT id, mobile_number, password, device_token FROM users WHERE mobile_number=$1", user.Mobile_number)
+			get_user, err := db.Query("SELECT id, mobile_number, password, devise_token FROM users WHERE mobile_number=$1", user.Mobile_number)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -188,7 +189,7 @@ func session(user models.User, login, logout bool) (string, bool, models.UserDet
 					if err != nil || res == nil {
 						log.Fatal(err)
 					}
-					user_details := models.User{id, mobile_number, devise_token}
+					user_details := models.UserDetails{id, mobile_number,"", devise_token}
 					return "Logged in Successfully", false, user_details
 				}
 			}
@@ -196,5 +197,5 @@ func session(user models.User, login, logout bool) (string, bool, models.UserDet
 		}
 	}
 	db.Close()
-	return "Invalid Mobile Number or Password", true, user
+	return "Invalid Mobile Number or Password", true, user_details
 }
