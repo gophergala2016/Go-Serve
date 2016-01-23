@@ -36,15 +36,15 @@ func (r registrationController) Create(rw http.ResponseWriter, req *http.Request
 		log.Fatal(err)
 	}
 
-	users, err := db.Exec("CREATE TABLE users (id SERIAL, name varchar(100), mobile_number varchar(100), password varchar(100), image varchar(2048), age int, gender varchar(100), device_token varchar(320), created_at timestamptz, PRIMARY KEY(id), UNIQUE (mobile_number))")
+	users, err := db.Exec("CREATE TABLE IF NOT EXISTS users (id SERIAL, name varchar(100), mobile_number varchar(100), password varchar(100), image varchar(2048), age int, gender varchar(100), devise_token varchar(320), created_at timestamptz, PRIMARY KEY(id), UNIQUE (mobile_number))")
 	if err != nil || users == nil {
 		log.Fatal(err)
 	}
-	devices, err := db.Exec("CREATE TABLE devices (id int, devise_token varchar(320), user_id int, CONSTRAINT devices_users_key FOREIGN KEY(user_id) REFERENCES users(id), PRIMARY KEY(devise_token))")
+	devices, err := db.Exec("CREATE TABLE IF NOT EXISTS devices (id int, devise_token varchar(320), user_id int, CONSTRAINT devices_users_key FOREIGN KEY(user_id) REFERENCES users(id), PRIMARY KEY(devise_token))")
 	if err != nil || devices == nil {
 		log.Fatal(err)
 	}
-	sessions, err := db.Exec("CREATE TABLE sessions (id int, user_id int, CONSTRAINT sessions_users_key FOREIGN KEY(user_id) REFERENCES users(id), devise_token varchar(320), CONSTRAINT sessions_devices_key FOREIGN KEY(devise_token) REFERENCES devices(devise_token));")
+	sessions, err := db.Exec("CREATE TABLE IF NOT EXISTS sessions (id int, user_id int, CONSTRAINT sessions_users_key FOREIGN KEY(user_id) REFERENCES users(id), devise_token varchar(320), CONSTRAINT sessions_devices_key FOREIGN KEY(devise_token) REFERENCES devices(devise_token));")
 	if err != nil || sessions == nil {
 		log.Fatal(err)
 	}
@@ -152,7 +152,7 @@ func (r registrationController) Create(rw http.ResponseWriter, req *http.Request
 			id = id + 1
 
 			var sStmt string = "insert into users (id, name, mobile_number, password, devise_token) values ($1,$2,$3,$4,$5)"
-			db, err := sql.Open("postgres", "password=password host=localhost dbname=postgres sslmode=disable")
+			db, err := sql.Open("postgres", "password=password host=localhost dbname=go_service_development sslmode=disable")
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -163,11 +163,9 @@ func (r registrationController) Create(rw http.ResponseWriter, req *http.Request
 
 			key := []byte("traveling is fun")
 			password := []byte(u.Password)
-			confirm_password := []byte(u.Password_confirmation)
 			encrypt_password := controllers.Encrypt(key, password)
-			encrypt_password_confirmation := controllers.Encrypt(key, confirm_password)
 
-			user_res, err := stmt.Exec(id, u.Name, u.Mobile_number, encrypt_password, encrypt_password_confirmation, u.Devise_token)
+			user_res, err := stmt.Exec(id, u.Name, u.Mobile_number, encrypt_password, u.Devise_token)
 			if err != nil || user_res == nil {
 				log.Fatal(err)
 			}
@@ -181,13 +179,12 @@ func (r registrationController) Create(rw http.ResponseWriter, req *http.Request
 			if err != nil || dev_res == nil {
 				log.Fatal(err)
 			}
-			var session string = "insert into sessions (start_time, user_id,devise_token) values ($1,$2,$3)"
+			var session string = "insert into sessions (user_id,devise_token) values ($1,$2)"
 			ses, err := db.Prepare(session)
 			if err != nil {
 				log.Fatal(err)
 			}
-			start_time := time.Now()
-			session_res, err := ses.Exec(start_time, id, u.Devise_token)
+			session_res, err := ses.Exec(id, u.Devise_token)
 			if err != nil || session_res == nil {
 				log.Fatal(err)
 			}
