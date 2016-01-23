@@ -14,6 +14,8 @@ func main() {
 	r.HandleFunc("/sign_up", account.Registration.Create).Methods("POST")
 	r.HandleFunc("/service/create", service.Service.Create).Methods("POST")
 
+	r.HandleFunc("/sign_in", account.Session.Create).Methods("POST")
+
 	http.Handle("/", r)
 	// HTTP Listening Port
 	log.Println("main : Started : Listening on: http://localhost:3000 ...")

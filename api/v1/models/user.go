@@ -33,7 +33,7 @@ type SessionDetails struct {
 type Message struct {
 	Success string
 	Message string
-	User    User
+	User    UserDetails
 }
 
 type ErrorMessage struct {
