@@ -3,7 +3,6 @@ package service
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"github.com/gophergala2016/Go-Serve/api/v1/models"
 	_ "github.com/lib/pq"
 	"log"
