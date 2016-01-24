@@ -13,7 +13,7 @@ func main() {
 	// Account Routes
 	r.HandleFunc("/sign_up", account.Registration.Create).Methods("POST")
 	r.HandleFunc("/sign_in", account.Session.Create).Methods("POST")
-	r.HandleFunc("/sign_in", account.Session.Create).Methods("POST")
+  r.HandleFunc("/log_out/{devise_token:([a-zA-Z0-9]+)?}", account.Session.Destroy).Methods("GET")
 
 	//Service
 	r.HandleFunc("/service/create", service.Service.Create).Methods("POST")
