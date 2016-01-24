@@ -1,4 +1,4 @@
-# Go-Serve : Community service App to help peaople
+# Go-Serve : Community service App to help people
 
 link
 
@@ -11,13 +11,13 @@ Written in **Go**, **Go-Serve** is a community service app that helps commenctin
 - abg 
 - bhm
 
-![image](desktop/How-May-I-Serve-You.jpg)
+![image](https://www.youtube.com/watch?v=qC3OqLNz6rY)
 
 ##How to use?
 
--isjdsajd
--cbxzbcjxbc
--xvzcbvzxcbn
+- isjdsajd
+- cbxzbcjxbc
+- xvzcbvzxcbn
 
 
 
