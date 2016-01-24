@@ -12,9 +12,12 @@ func main() {
 	r := mux.NewRouter()
 	// Account Routes
 	r.HandleFunc("/sign_up", account.Registration.Create).Methods("POST")
-	r.HandleFunc("/service/create", service.Service.Create).Methods("POST")
-
 	r.HandleFunc("/sign_in", account.Session.Create).Methods("POST")
+	r.HandleFunc("/sign_in", account.Session.Create).Methods("POST")
+
+	//Service
+	r.HandleFunc("/service/create", service.Service.Create).Methods("POST")
+	r.HandleFunc("/service/list", service.List.Index).Methods("GET")
 
 	http.Handle("/", r)
 	// HTTP Listening Port

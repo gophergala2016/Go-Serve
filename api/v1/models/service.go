@@ -16,3 +16,9 @@ type SuccessServiceMessage struct {
 	Success string
 	Message string
 }
+
+type ServiceList struct {
+	Success         string
+	No_Of_Service   int
+	Service_Details []Service
+}

@@ -71,12 +71,12 @@ func (s serviceController) Create(rw http.ResponseWriter, req *http.Request) {
 			}
 			id = id + 1
 
-			var insert_service string = "insert into service_provider(id, type, description, experience, certificate, address, city, state,country) values ($1,$2,$3,$4,$5,$6,$7,$8,$9)"
+			var insert_service string = "insert into service_provider(id, user_id type, description, experience, certificate, address, city, state,country) values ($1,$2,$3,$4,$5,$6,$7,$8,$9)"
 			prepare_insert_service, err := db.Prepare(insert_service)
 			if err != nil {
 				log.Fatal(err)
 			}
-			user_res, err := prepare_insert_service.Exec(id, u.Type, u.Description, u.Experience, u.Certificate, u.Address, u.City, u.State, u.Country)
+			user_res, err := prepare_insert_service.Exec(id, u.User_id, u.Type, u.Description, u.Experience, u.Certificate, u.Address, u.City, u.State, u.Country)
 			if err != nil || user_res == nil {
 				log.Fatal(err)
 			}
