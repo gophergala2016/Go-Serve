@@ -33,7 +33,7 @@ type Profile struct {
 	Image								 string `valid:"alphanum"`
 	Name                 string `valid:"alphanum"`
 	Mobile_number        string `valid:"alphanum"`
-	Age                  string `valid:"alphanum,required"`
+	Age                  int `valid:"numeric,required"`
 	Gender               string `valid:"alphanum,required"`
 }
 

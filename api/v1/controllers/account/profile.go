@@ -36,7 +36,7 @@ func (profile profileController) Create(rw http.ResponseWriter, req *http.Reques
 	}
 
 	if flag == 1 {
-		if p.User_id == 0 || p.Image == "" || p.Name == "" || p.Mobile_number == "" || p.Age == "" || p.Gender == "" {
+		if p.User_id == 0 || p.Image == "" || p.Name == "" || p.Mobile_number == "" || p.Gender == "" {
 
 			result, err := govalidator.ValidateStruct(p)
 			if err != nil {
