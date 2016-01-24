@@ -1,16 +1,16 @@
 package service
 
 import (
-"database/sql"
-"encoding/json"
-"fmt"
-"github.com/gophergala2016/Go-Serve/api/v1/controllers"
-"github.com/gophergala2016/Go-Serve/api/v1/models"
-"github.com/gorilla/mux"
-_ "github.com/lib/pq"
-"log"
-"net/http"
-"strconv"
+	"database/sql"
+	"encoding/json"
+	"fmt"
+	"github.com/gophergala2016/Go-Serve/api/v1/controllers"
+	"github.com/gophergala2016/Go-Serve/api/v1/models"
+	"github.com/gorilla/mux"
+	_ "github.com/lib/pq"
+	"log"
+	"net/http"
+	"strconv"
 )
 
 type listController struct{}
@@ -53,28 +53,26 @@ func (s listController) Index(rw http.ResponseWriter, req *http.Request) {
 			log.Fatal(err)
 		}
 		for get_user_details.Next() {
-			err :=get_user_details.Scan(&Name, &Image, &Mobile_number)
+			err := get_user_details.Scan(&Name, &Image, &Mobile_number)
 			log.Fatal(err)
 		}
 	}
 	l.Service_Details = append(l.Service_Details, models.User_Service{User_id, Name, Mobile_number, Image, Type, Description, Experience, Certificate, Address, City, State, Country})
 	no_of_issues++
-}
-
-if flag == 1 {
-	b, err := json.Marshal(models.ServiceList{
-		Success:         "true",
-		No_Of_Service:   no_of_issues,
-		Service_Details: l.Service_Details,
+	if flag == 1 {
+		b, err := json.Marshal(models.ServiceList{
+			Success:         "true",
+			No_Of_Service:   no_of_issues,
+			Service_Details: l.Service_Details,
 		})
-	if err != nil {
-		log.Fatal(err)
-	}
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	rw.Header().Set("Content-Type", "application/json")
-	rw.Write(b)
-	goto index_end
-}
+		rw.Header().Set("Content-Type", "application/json")
+		rw.Write(b)
+		goto index_end
+	}
 index_end:
 }
 
@@ -96,7 +94,7 @@ func (s listController) Show(rw http.ResponseWriter, req *http.Request) {
 		b, err := json.Marshal(models.SuccessServiceMessage{
 			Success: "false",
 			Message: "user does not exist",
-			})
+		})
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -112,7 +110,7 @@ func (s listController) Show(rw http.ResponseWriter, req *http.Request) {
 			b, err := json.Marshal(models.SuccessServiceMessage{
 				Success: "false",
 				Message: "need to login first",
-				})
+			})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -152,7 +150,7 @@ func (s listController) Show(rw http.ResponseWriter, req *http.Request) {
 				Success:         "true",
 				No_Of_Service:   no_of_issues,
 				Service_Details: l.Service_Details,
-				})
+			})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -162,5 +160,5 @@ func (s listController) Show(rw http.ResponseWriter, req *http.Request) {
 			goto user_service_list_end
 		}
 	}
-	user_service_list_end:
+user_service_list_end:
 }
