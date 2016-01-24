@@ -28,6 +28,15 @@ type SessionDetails struct {
 	DeviseToken string
 }
 
+type Profile struct {
+	User_id							 int `valid:"numeric"`
+	Image								 string `valid:"alphanum"`
+	Name                 string `valid:"alphanum"`
+	Mobile_number        string `valid:"alphanum"`
+	Age                  int `valid:"numeric,required"`
+	Gender               string `valid:"alphanum,required"`
+}
+
 // Message struct [controllers/account]
 // Common for sign_up, session and password
 type Message struct {
