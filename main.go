@@ -18,7 +18,9 @@ func main() {
 	//Service
 	r.HandleFunc("/service/create", service.Service.Create).Methods("POST")
 	r.HandleFunc("/service/list", service.List.Index).Methods("GET")
+	r.HandleFunc("/service/{id:[0-9]+}/list", service.List.Show).Methods("GET")
 
+	//Profile
 	r.HandleFunc("/profile", account.Profile.Create).Methods("POST")
 
 	http.Handle("/", r)

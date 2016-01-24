@@ -12,12 +12,32 @@ type Service struct {
 	Country     string `valid:"alphanum,required"`
 }
 
+type User_Service struct {
+	User_id     int
+	Name        string
+	Image       string
+	Type        int
+	Description string
+	Experience  int
+	Certificate bool
+	Address     string
+	City        string
+	State       string
+	Country     string
+}
+
 type SuccessServiceMessage struct {
 	Success string
 	Message string
 }
 
 type ServiceList struct {
+	Success         string
+	No_Of_Service   int
+	Service_Details []User_Service
+}
+
+type UserServeList struct {
 	Success         string
 	No_Of_Service   int
 	Service_Details []Service
