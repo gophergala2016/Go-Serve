@@ -2,28 +2,29 @@ package models
 
 type Service struct {
 	User_id     int    `valid:"numeric"`
-	Type        int    `valid:"numeric"`
+	Type        int    `valid:"numeric",required`
 	Description string `valid:"alphanum,required"`
 	Experience  int    `valid:"numeric"`
 	Certificate bool
 	Address     string `valid:"alphanum,required"`
 	City        string `valid:"alphanum,required"`
 	State       string `valid:"alphanum,required"`
-	Country     string `valid:"alphanum,required"`
+	Country     string `valid:"alphanum"`
 }
 
 type User_Service struct {
-	User_id     int
-	Name        string
-	Image       string
-	Type        int
-	Description string
-	Experience  int
-	Certificate bool
-	Address     string
-	City        string
-	State       string
-	Country     string
+	User_id      int
+	Name         string
+	Image        string
+	MobileNumber string
+	Type         int
+	Description  string
+	Experience   int
+	Certificate  bool
+	Address      string
+	City         string
+	State        string
+	Country      string
 }
 
 type SuccessServiceMessage struct {
