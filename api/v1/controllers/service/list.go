@@ -3,7 +3,6 @@ package service
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"github.com/gophergala2016/Go-Serve/api/v1/controllers"
 	"github.com/gophergala2016/Go-Serve/api/v1/models"
 	"github.com/gorilla/mux"
@@ -56,9 +55,9 @@ func (s listController) Index(rw http.ResponseWriter, req *http.Request) {
 			err := get_user_details.Scan(&Name, &Image, &Mobile_number)
 			log.Fatal(err)
 		}
+		l.Service_Details = append(l.Service_Details, models.User_Service{User_id, Name, Mobile_number, Image, Type, Description, Experience, Certificate, Address, City, State, Country})
+		no_of_issues++
 	}
-	l.Service_Details = append(l.Service_Details, models.User_Service{User_id, Name, Mobile_number, Image, Type, Description, Experience, Certificate, Address, City, State, Country})
-	no_of_issues++
 	if flag == 1 {
 		b, err := json.Marshal(models.ServiceList{
 			Success:         "true",
