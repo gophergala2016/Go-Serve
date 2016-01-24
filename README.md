@@ -11,7 +11,7 @@ Written in **Go**, **Go-Serve** is a community service app that helps commenctin
 - abg 
 - bhm
 
-[Hongkiat.com](https://www.youtube.com/watch?v=qC3OqLNz6rY)
+[G0-Serve](https://www.youtube.com/watch?v=qC3OqLNz6rY)
 
 ##How to use?
 
