@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/asaskevich/govalidator"
 	"github.com/gophergala2016/Go-Serve/api/v1/models"
+	"github.com/gophergala2016/Go-Serve/api/v1/controllers"
 	_ "github.com/lib/pq"
 	"io/ioutil"
 	"log"
@@ -55,18 +56,63 @@ func (profile profileController) Create(rw http.ResponseWriter, req *http.Reques
 			goto create_profile_end
 		}
 	}
+ 	if flag == 1 {
+	 	user_existance := controllers.Check_for_user(p.User_id)
+		if user_existance == false {
+			flag = 0
+			b, err := json.Marshal(models.SuccessServiceMessage{
+			Success: "false",
+			Message: "user does not exist"  ,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+		rw.Header().Set("Content-Type", "application/json")
+		rw.Write(b)
+		goto create_profile_end
+		}
+
+ 	}
+	
+	if flag == 1 {
+		user_existance := controllers.Check_for_user_session(p.User_id)
+		if user_existance == false {
+			flag = 0
+			b, err := json.Marshal(models.SuccessServiceMessage{
+			Success: "false",
+			Message: "need to login first"  ,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+		rw.Header().Set("Content-Type", "application/json")
+		rw.Write(b)
+		goto create_profile_end
+		}
+
+	}
 
 	if flag == 1 {
    	update_profile, err := db.Query("UPDATE users set name = $1, mobile_number = $2, image = $3, age = $4, gender = $5 where id = $6", p.Name, p.Mobile_number, p.Image, p.Age, p.Gender, p.User_id)
-   	result, err := govalidator.ValidateStruct(p)
 		if err != nil || update_profile == nil {
 			log.Fatal(err)
 			}
-		fmt.Println(result)
-		flag = 0
-		b, err := json.Marshal(models.ErrorMessage{
+		b, err := json.Marshal(models.SuccessServiceMessage{
+			Success: "true",
+			Message: "profile updated successfully"  ,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+		rw.Header().Set("Content-Type", "application/json")
+		rw.Write(b)
+		goto create_profile_end
+	}
+
+	if flag == 0 {
+		b, err := json.Marshal(models.SuccessServiceMessage{
 			Success: "false",
-			Error:   err.Error(),
+			Message: "Unable to update profile"  ,
 		})
 		if err != nil {
 			log.Fatal(err)
